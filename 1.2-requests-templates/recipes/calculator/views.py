@@ -28,3 +28,13 @@ DATA = {
 #     'ингредиент2': количество2,
 #   }
 # }
+def get_dish(request, dish):
+    servings = int(request.GET.get("servings", 1))
+    changed_data = dict()
+    for el, count in DATA[dish].items():
+        changed_data[el] = count*servings
+
+    context = {
+        'recipe': changed_data,
+    }
+    return render(request, 'calculator/index.html', context)
