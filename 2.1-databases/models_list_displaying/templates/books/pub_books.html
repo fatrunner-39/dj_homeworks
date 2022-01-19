@@ -7,7 +7,7 @@
         <div class="header">
             <h1><a href="/books">Каталог</a></h1>
         </div>
-        {% for book in books_list %}
+        {% for book in pub_books %}
         <div class="row">
             <div class="book col-md-4">
                 <h2>{{ book.name }}</h2>
@@ -16,5 +16,11 @@
             </div>
         </div>
         {% endfor %}
+        {% if page.has_previous %}
+            <a class="button button-primary" href="{{ page.previous_page_number }}">⟵</a>
+        {% endif %}
+        {% if page.has_next %}
+            <a class="button button-primary" href="{{ page.next_page_number }}">⟶</a>
+        {% endif %}
     </div>
 {% endblock %}
