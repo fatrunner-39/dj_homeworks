@@ -3,9 +3,10 @@ from .models import Measurement, Sensor
 
 
 class MeasurementSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Measurement
-        fields = ['sensor_id', 'temperature', 'created_at']
+        fields = ['sensor_id', 'temperature', 'created_at', 'shot']
 
     def to_representation(self, obj):
         rep = super(MeasurementSerializer, self).to_representation(obj)
