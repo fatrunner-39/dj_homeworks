@@ -3,6 +3,7 @@ from rest_framework.test import APIClient
 from model_bakery import baker
 
 from students.models import Student, Course
+# from django_testing.settings import MAX_STUDENTS_PER_COURSE
 
 
 @pytest.fixture
@@ -37,8 +38,7 @@ def test_get_course(client, course_factory):
     assert response.status_code == 200
 
     data = response.json()
-    for i, course in enumerate(data):
-        assert course['name'] == courses[i].name
+    assert data[0]['name'] == courses[0].name
 
 
 # Проверка получения списка курсов
@@ -64,6 +64,8 @@ def test_courses_filter_by_id(client, course_factory):
     response = client.get(f'/api/v1/courses/?id={courses[0].id}')
 
     assert response.status_code == 200
+    data = response.json()
+    assert data[0]['id'] == courses[0].id
 
 
 # Проверка фильтрации списка курсов по name
@@ -75,6 +77,9 @@ def test_courses_filter_by_name(client, course_factory):
     response = client.get(f'/api/v1/courses/?name={courses[0].name}')
 
     assert response.status_code == 200
+    data = response.json()
+    assert data[0]['name'] == courses[0].name
+
 
 # Тест успешного создания курса
 @pytest.mark.django_db
@@ -84,7 +89,8 @@ def test_success_create_course(client):
     response = client.post('/api/v1/courses/', data={'name': 'test'})
 
     assert response.status_code == 201
-
+    data = response.json()
+    assert data['name'] == 'test'
     assert Course.objects.count() == count + 1
 
 
@@ -96,10 +102,11 @@ def test_success_update_course(client, course_factory):
 
     count = Course.objects.count()
 
-    response = client.patch(f'/api/v1/courses/{courses[0].id}/', data={'name': 'test'})
+    response = client.patch(f'/api/v1/courses/{courses[0].id}/', data={'name': 'new'})
 
     assert response.status_code == 200
-
+    data = response.json()
+    assert data['name'] == 'new'
     assert Course.objects.count() == count
 
 
