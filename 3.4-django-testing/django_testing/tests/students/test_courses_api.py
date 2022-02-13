@@ -33,12 +33,13 @@ def test_get_course(client, course_factory):
 
     courses = course_factory(_quantity=1)
 
-    response = client.get(f'/api/v1/courses/')
+    response = client.get(f'/api/v1/courses/{courses[0].id}/')
 
     assert response.status_code == 200
 
     data = response.json()
-    assert data[0]['name'] == courses[0].name
+    print(data)
+    assert data['name'] == courses[0].name
 
 
 # Проверка получения списка курсов
